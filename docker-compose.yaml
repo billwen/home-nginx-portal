@@ -1,0 +1,13 @@
+# https://mindsers.blog/post/https-using-nginx-certbot-docker/
+# https://ilhicas.com/2019/03/02/Nginx-Letsencrypt-Docker.html?expand_article=1
+version: '3'
+services:
+  portal:
+    image: billwen/guludoc-portal:0.1
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
