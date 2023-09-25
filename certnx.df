@@ -1,0 +1,18 @@
+# sudo docker build -f certnx.df -t billwen/certnx:0.1 .
+# sudo docker run -d --name certnx -v ssl_certs:/etc/letsencrypt billwen/certnx:0.1 
+# https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+FROM certbot/certbot:latest
+
+RUN apk update \
+    && apk add openssl curl ca-certificates inotify-tools certbot-nginx
+
+RUN printf "%s%s%s\n" "http://nginx.org/packages/mainline/alpine/v" `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` "/main" | tee -a /etc/apk/repositories
+
+RUN curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub \
+    && mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/ \
+    && apk add nginx
+
+COPY ./scripts /scripts
+RUN chmod +x /scripts/*.sh
+
+ENTRYPOINT ["/scripts/entrypoint.sh"]
