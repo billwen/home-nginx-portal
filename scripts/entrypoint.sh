@@ -19,7 +19,7 @@ if [[ ! -f /usr/share/nginx/certificates/fullchain.pem ]]; then
 fi
 
 ### Send certbot Emission/Renewal to background
-$(while :; do /opt/certbot.sh; sleep "${RENEW_INTERVAL:-12h}"; done;) &
+$(while :; do /scripts/certbot.sh; sleep "${RENEW_INTERVAL:-12h}"; done;) &
 
 ### Check for changes in the certificate (i.e renewals or first start) and send this process to background
 $(while inotifywait -e close_write /usr/share/nginx/certificates; do nginx -s reload; done) &

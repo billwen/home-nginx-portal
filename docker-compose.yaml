@@ -1,5 +1,8 @@
 # https://mindsers.blog/post/https-using-nginx-certbot-docker/
 # https://ilhicas.com/2019/03/02/Nginx-Letsencrypt-Docker.html?expand_article=1
+# sudo docker volume create challenge
+# sudo docker volume create ssl-certs
+# sudo docker run --rm certbot/certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d *.guludoc.com
 version: '3'
 services:
   portal:
@@ -8,6 +11,15 @@ services:
       - 80:80
       - 443:443
     restart: always
-
+    volumes:
+      - challenge:/var/www/certbot
+      - ssl-certs:/etc/letsencrypt
   certbot:
     image: certbot/certbot:latest
+    volumes:
+      - challenge:/var/www/certbot
+      - ssl-certs:/etc/letsencrypt
+
+volumes:
+  challenge:
+  ssl-certs:
