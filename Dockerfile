@@ -6,6 +6,6 @@ RUN chmod 400 /etc/letsencrypt/live/guludoc.com/priv*.pem
 COPY ./nginx_conf /etc/nginx
 COPY ./www /usr/share/nginx/html
 
-EXPOSE 80 443 4999 5000
+EXPOSE 80 443
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
